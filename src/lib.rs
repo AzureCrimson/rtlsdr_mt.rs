@@ -28,15 +28,13 @@
 //! }).unwrap();
 //! ```
 
-#![feature(conservative_impl_trait)]
-
 extern crate libc;
 extern crate rtlsdr_sys as ffi;
 
 use std::ffi::CStr;
 use std::sync::Arc;
 
-use libc::{c_uchar, uint32_t, c_void};
+use libc::{c_uchar, c_void};
 
 /// Holds a list of valid gain values.
 pub type TunerGains = [i32; 32];
@@ -255,7 +253,7 @@ impl Reader {
 }
 
 /// Wraps a callback for use as a librtlsdr async callback.
-extern fn async_wrapper<F>(buf: *mut c_uchar, len: uint32_t, ctx: *mut c_void)
+extern fn async_wrapper<F>(buf: *mut c_uchar, len: u32, ctx: *mut c_void)
     where F: FnMut(&[u8])
 {
     let closure = ctx as *mut F;
